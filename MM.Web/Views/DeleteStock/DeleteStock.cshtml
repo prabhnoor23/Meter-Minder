@@ -1,0 +1,104 @@
+﻿@model List<Pspcl.Services.Models.AvailableStockModel>
+@{
+    Layout = "~/Views/Shared/_TwoColumnLayout.cshtml";
+}
+
+
+<div class="main-content">
+    <div class="page-content">
+
+        <div id="stock-in-report">
+            <h3>Stock List</h3>
+            @*<button type="submit" value="Delete" class="btn btn-sm btn-danger rounded-0" onclick="return confirm('Are you sure?')"><i class="fa fa-trash-o"></i> Delete</button>
+*@
+
+            <button type="submit" class="btn btn-dark blackButton px-4 mt-3 mr-2" id="deleteStockBtn">Delete</button>
+            <br /><br />
+
+        </div>
+        <table id="StockList" class="table table-responsive custom-table">
+            <thead class="thead-dark">
+                <tr>
+                    <th><input type="checkbox" id="checkBoxAll" class="custom-checkbox" /></th>
+                    <th scope="col">GRN No.</th>
+                    <th scope="col">GRN Date</th>
+                    <th scope="col">Material Group</th>
+                    <th scope="col">Material Type</th>
+                    <th scope="col">Material Code</th>
+                    <th scope="col">Make</th>
+                    <th scope="col">Sr.No From</th>
+                    <th scope="col">Sr.No To</th>
+                    <th scope="col">Qty</th>
+                    <th scope="col">Rate/Unit</th>
+                    
+
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                @if (Model!=null)
+                {
+                    @foreach (var AvailableStockModel in Model)
+                    {
+                        <tr>
+                            <td><input type="checkbox" name="ID" value="@AvailableStockModel.grnNo" class="custom-checkbox eachStockRow " /></td>
+                            <td>@AvailableStockModel.grnNo</td>
+                            <td>@AvailableStockModel.grnDate.ToString().Split(' ')[0]</td>
+                            <td>@AvailableStockModel.MaterialGroup</td>
+                            <td>@AvailableStockModel.MaterialName</td>
+                            <td>@AvailableStockModel.MaterialCode</td>
+                            <td>@AvailableStockModel.Make</td>
+                            <td>@AvailableStockModel.SrNoFrom</td>
+                            <td>@AvailableStockModel.SrNoTo</td>
+                            <td>@AvailableStockModel.AvailableQuantity</td>
+                            <td>@AvailableStockModel.Rate</td>
+                            <td hidden>@AvailableStockModel.StockMaterialId</td>
+
+                        </tr>
+                    }
+                }
+                
+            </tbody>
+
+        </table>
+
+        
+
+    </div>
+
+
+</div>
+
+<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the selected stock?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blackButton text-white" id="retrieveRowsBtn">Yes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="stockNotAvailableModal" tabindex="-1" role="dialog" aria-labelledby="stockNotAvailableModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mySmallModalLabel"></h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <p id="mainModalContent" class="mx-auto my-5 font-weight-normal">
+                Stock not available!
+            </p>
+        </div>
+    </div>
+</div>
+

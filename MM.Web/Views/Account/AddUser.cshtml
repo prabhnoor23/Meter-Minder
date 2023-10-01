@@ -1,0 +1,78 @@
+﻿
+@model Pspcl.Services.Models.AddUserModel
+@{
+    Layout = "~/Views/Shared/_TwoColumnLayout.cshtml";
+}
+
+
+<div class="main-content">
+	<div class="page-content">
+        <div id="loadingIndicator" class="loading-indicator" style="display: none;">
+            <div class="spinner"></div>
+        </div>
+        <h2>Add New User</h2>
+
+        <form asp-controller="Account" asp-action="AddUser" id="UserForm" method="post">
+            <div class="form-group">
+                <label for="user-role">User role:</label>
+                <select class="form-control col-md-3" id="choosenUserRole" name="choosenUserRole" required>
+                    @if (TempData["choosenRole"] != null)
+                    {
+                        @if (TempData["choosenRole"].ToString() == "Super-Admin")
+                        {
+                            <option value="@TempData["choosenRole"]" selected>Super Admin</option>
+                            <option value="Inventory-Manager">Inventory Manager</option>
+                        }
+                        else
+                        {
+                            <option value="@TempData["choosenRole"]" selected>Inventory Manager</option>
+                            <option value="Super-Admin">Super Admin</option>
+                        }
+                    }else{
+                        <option value="" disabled selected>Please select User-Role</option>
+                        <option value="Super-Admin">Super Admin</option>
+                        <option value="Inventory-Manager">Inventory Manager</option>
+                    }                    
+                   
+                   
+                    
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email<span class="required-field text-danger">*</span></label>
+                <input type="email" class="form-control col-md-4" id="email" name="email" placeholder="Please enter email" value="@Model?.Email" required>
+            </div>
+            <div class="form-group">
+                <label for="firstName">First Name <span class="required-field text-danger">*</span></label>
+                <input type="text" class="form-control col-md-4" id="firstName" name="firstName" placeholder="Please enter first name" value="@Model?.FirstName">
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last Name <span class="required-field text-danger">*</span></label>
+                <input type="text" class="form-control col-md-4" id="lastName" name="lastName" placeholder="Please enter last name" value="@Model?.LastName">
+            </div>
+
+
+            <div class="form-group">
+                <label for="password">Password <span class="required-field text-danger">*</span></label>
+                <input type="password" class="form-control col-md-4" id="password" name="password" placeholder="Create new password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password <span class="required-field text-danger">*</span></label>
+                <input type="password" class="form-control col-md-4" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password" required>
+                @if (!string.IsNullOrEmpty(ViewData["PasswordMismatchError"] as string))
+                {
+                    <span class="text-danger">@ViewData["PasswordMismatchError"]</span>
+                }
+            </div>
+            
+            <button type="submit" id="addUserForm" class="btn btn-orange text-light">Add User</button>
+        </form>
+	</div>
+</div>
+
+
+
+
+
+

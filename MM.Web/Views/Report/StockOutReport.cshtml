@@ -1,0 +1,115 @@
+﻿@model List<Pspcl.Services.Models.StockOutModel>
+@{
+    Layout = "~/Views/Shared/_TwoColumnLayout.cshtml";
+}
+<div class="main-content">
+    <div class="page-content">
+        <div id="stock-out-report"><h3>Stock-Out Report</h3> </div>
+        <div class="mt-4 d-flex align-items-center">
+            <div class="col-md-4 pl-0">
+                <div class="d-flex align-items-center">
+                    <label for="fromDate" class="mr-1 mt-1">From Issued Date <span class="required-field text-danger"></span></label>
+                    <input type="date" class="form-control width-0 custom-field" id="fromDate" placeholder="Issued Date">
+                </div>
+            </div>
+
+            <div class="col-md-3" style="margin-left: -62px !important;">
+                <div class="d-flex align-items-center" style="margin-left: -0.75rem!important;">
+                    <label for="toDate" class="mr-1 mt-1">To Issued Date <span class="required-field text-danger"></span></label>
+                    <input type="date" class="form-control width-0 custom-field" id="toDate" placeholder="Issued Date">
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary mr-1" id="filterStockOutButton" data-toggle="tooltip" data-placement="bottom" title="Filter">
+                <i class="fas fa-search"></i>
+            </button>
+            <button onclick="location.href='@Url.Action("StockOutReport", "Report")'" type="button" class="btn btn-primary" id="clearButton" data-toggle="tooltip" data-placement="bottom" title="Refresh">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+
+            <button type="button" class="btn btn-dark blackButton px-5 ml-auto" id="exportButton">Export to Excel</button>
+
+        </div>
+
+        <table id="stockOutReportTable" class="table table-responsive custom-table report">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Txn Out Id</th>
+                    <th>IssueDate</th>
+                    <th>Sr.No.</th>
+                    <th>Sr.Control No.</th>
+                    <th>SrNo Date</th>
+                    <th>Division</th>
+                    <th>Location code</th>
+                    <th>SubDiv</th>
+                    <th>JE Name</th>
+                    <th>Material Type</th>
+                    <th>Material Code</th>
+                    <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>Make</th>
+                    <th>Cost</th>
+                    <th>Image</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>@item.TransactionId</td>
+                            <td>@item.CurrentDate.ToString().Split(' ')[0]</td>
+                            <td>@item.SerialNumber</td>
+                            <td>@item.SrControlNumber</td>
+                            <td>@item.SrNoDate.ToString().Split(' ')[0]</td>
+                            <td>@item.DivisionName</td>
+                            <td>@item.LocationID</td>
+                            <td>@item.SubDivisionName</td>
+                            <td>@item.JuniorEngineerName</td>
+                            <td>@item.MaterialName</td>
+                            <td>@item.MaterialCode</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.Rate</td>
+                            <td>@item.Make</td>
+                            <td>@item.Cost</td>
+                            @if (item.ImageName != "")
+                            {
+                                <td>
+                                    <button class="btn btn-link download-button" onclick="downloadImage('@item.ImageName')">
+                                        <i class="fa fa-download "></i> Download
+                                    </button>
+                                </td>
+                            }
+                            else
+                            {
+                                <td align="center">No image uploaded</td>
+                            }
+
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <div id="paginate"></div>
+
+    </div>
+    @Html.Partial("_ModalPartial")
+    <div class="modal fade" id="stockNotAvailableModal" tabindex="-1" role="dialog" aria-labelledby="stockNotAvailableModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mySmallModalLabel"></h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <p id="mainModalContent" class="mx-auto my-5 pl-5 font-weight-normal">
+
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

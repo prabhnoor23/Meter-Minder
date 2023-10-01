@@ -1,0 +1,75 @@
+﻿
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>@ViewData["Title"]</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta name="robots" content="index, follow" />
+    <link rel="shortcut icon" type="image/x-icon" href="~/images/favicon.ico">
+    <!-- SEO Start-->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <!-- SEO End-->
+    <meta name="theme-color" content="#016c9a" />
+    <meta name="msapplication-navbutton-color" content="#016c9a" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="#016c9a" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- CSS Start -->
+    <link href="~/css/main.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/fontawesome.css" rel="stylesheet" />
+    <!-- Footable CSS Start-->
+    <link href="~/css/footable.bootstrap.min.css" rel="stylesheet" />
+    <!-- Footable CSS End-->
+    <link href="~/css/screen.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="~/css/simplePagination.css" />
+   
+</head>
+
+
+<body class="">
+
+    <!-- HTML Start -->
+    <div id="layout-wrapper">
+
+        <header id="page-topbar">
+            <!-- Navbar partial view -->
+            @Html.Partial("_Navbar")
+        </header>
+
+        <!-- ========== Left Sidebar Start ========== -->
+        @Html.Partial("_LeftSidebar")
+        <!-- Left Sidebar End -->
+
+        @RenderBody()
+
+
+        <!-- Footer partial view -->
+        @Html.Partial("_Footer")
+
+    </div>
+   
+
+    <!-- JS Start -->
+    @await RenderSectionAsync("Scripts", required: false)
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="~/js/main.min.js"></script>
+    <script src="~/js/simplebar.min.js"></script>
+    <script src="~/js/metisMenu.min.js"></script>
+    <script src="~/js/common.ui.js"></script>
+    <script src="~/js/stockView.js"></script>
+    <script src="~/js/site.js"></script>
+
+    <script src="~/js/jquery.simplePagination.js"></script>
+    <!-- JS End -->
+</body>
+
+</html>

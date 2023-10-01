@@ -1,0 +1,121 @@
+﻿@{
+    Layout = "~/Views/Shared/_TwoColumnLayout.cshtml";
+}
+@model Pspcl.Web.Models.IssueStockModel
+
+<div class="main-content">
+    <div class="page-content">
+        <div class="container">
+            <input type="hidden" id="successMessage" value="@TempData["Message"]" />
+            <div class="modal fade" id="staticBackdropLive" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLiveLabel" aria-modal="true" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title fs-3" id="staticBackdropLiveLabel"></h3>
+                            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <p id="successMessagePlaceholder"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex mb-3">
+                <button type="button" class="btn btn-dark blackButton px-5 ml-auto" onclick="printPage()">Print</button>
+            </div>
+            <div class="row justify-content-center ">
+                <table class="issueStockTable table">
+                   
+                    <tr>
+                        <td scope="col">Issued Date:</td>
+                        <td scope="col">@Model.CurrentDate.ToString().Split(' ')[0]</td>
+                    </tr>
+                    <tr>
+                        <td scope="col">Sr No Date:</td>
+                        <td scope="col">@Model.SrNoDate.ToString().Split(' ')[0]</td>
+                    </tr>
+                    <tr>
+                        <td scope="col">Serial Number:</td>
+                        <td scope="col">@Model.SerialNumber</td>
+                    </tr>
+                    <tr>
+                        <td scope="col">Sr Control Number:</td>
+                        <td scope="col">@Model.SrControlNumber</td>
+                    </tr>
+                    <tr>
+                        <td scope="col">JE Name:</td>
+                        <td scope="col">@Model.JuniorEngineerName</td>
+                    </tr>
+                    <tr>
+                        <td scope="col">SubDivision:</td>
+                        <td scope="col">@Model.SubDivisionName</td>
+                    </tr>
+                    <tr>
+                        <td scope="col">Division:</td>
+                        <td scope="col">@Model.Division</td>
+                    </tr>
+                    <tr>
+                        <td scope="col">Circle:</td>
+                        <td scope="col">@Model.Circle</td>
+                    </tr>
+                    <tr>
+                        <td scope="col">Location Code:</td>
+                        <td scope="col">@Model.LocationCode</td>
+                    </tr>
+                    <tr>
+                        <td scope="col">Material Group:</td>
+                        <td scope="col">@Model.MaterialGroupName</td>
+                    </tr>
+                    
+                    <tr>
+                        <td scope="col">Material Type:</td>
+                        <td scope="col">@Model.MaterialTypeName</td>
+                    </tr>
+                    
+                    <tr>
+                        <td scope="col">Material Code:</td>
+                        <td scope="col">@Model.MaterialCode</td>
+                    </tr>
+                    
+                    <tr>
+                        <td scope="col">Cost:</td>
+                        <td scope="col">@Model.Cost</td>
+                    </tr>
+                </table>
+
+                <div class="row w-100">
+                    <table class="table table-responsive custom-table ">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Make</th>
+                                <th scope="col">Sr. No From</th>
+                                <th scope="col">Sr. No To</th>
+                                <th scope="col">QTY</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="issuedRows">
+                            @if (Model.IssuedStockRanges != null)
+                            {
+                                foreach (var keyValuePair in Model.IssuedStockRanges)
+                                {
+                                    foreach (var row in keyValuePair.Value)
+                                    {
+                                        <tr>
+                                            <td scope="col">@keyValuePair.Key</td>
+                                            <td scope="col">@row[1]</td>
+                                            <td scope="col">@row[2]</td>
+                                            <td scope="col">@row[3]</td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+       
+    </div>
+</div>

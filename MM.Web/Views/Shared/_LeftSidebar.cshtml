@@ -1,0 +1,81 @@
+﻿<div class="vertical-menu">
+    <div data-simplebar class="height100">
+        <!--- Sidemenu -->
+        <div id="sidebar-menu">
+            <!-- Left Menu Start -->
+            <ul class="metismenu list-unstyled" id="side-menu">
+                <li>
+                    <a href="#submenu" data-toggle="collapse" aria-expanded="false" class="li-item flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-start align-items-center mr-3">
+                            <i class="fas fa-sliders-h"></i>
+                            <span class="menu-collapsed">Manage Stock</span>
+                            <span class="submenu-icon ml-auto"><i class="fas fa-chevron-down"></i></span>
+
+                        </div>
+                    </a>
+                    <div id="submenu" class="collapse sidebar-submenu">
+
+                        <a href="@Url.Action("AddStock", "StockView")" class="li-item text-white submenu-item">
+                            <i class="fas fa-plus-circle ml-4"></i>
+                            <span class="menu-collapsed">Add Stock</span>
+                        </a>
+                        @if (!User.IsInRole("InventoryManager"))
+                        {
+                            <a href="@Url.Action("DeleteStock", "DeleteStock")" class="li-item text-white submenu-item">
+                                <i class="fas fa-trash ml-4"></i>
+                                <span class="menu-collapsed">Delete Stock</span>
+                            </a>
+                        }
+                        
+                    </div>
+                </li>
+                <li>
+                    <a href="@Url.Action("IssueStockView", "IssueStock")" class="menu-item mt-1">
+                        <i class="fab fa-stack-exchange"></i>
+                        <span>Issue Stock</span>
+                    </a>
+                </li>
+
+                <li hidden>
+                    <a href="@Url.Action("AddTipView", "AddTip")" class="menu-item">
+                        <i class="fas fa-folder-plus"></i>
+                        <span>Add TIP</span>
+                    </a>
+                </li>
+
+                <li hidden>
+                    <a href="@Url.Action("IssueTipView", "IssueTip")" class="menu-item">
+                        <i class="fas fa-folder"></i>
+                        <span>Issue TIP</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#submenu1" data-toggle="collapse" aria-expanded="false" class="li-item flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-start align-items-center mr-2">
+                            <i class="far fa-chart-bar"></i>
+                            <span class="menu-collapsed">Reports</span>
+                            <span class="submenu-icon ml-auto"><i class="fas fa-chevron-down"></i></span>
+                        </div>
+                    </a>
+                    <div id="submenu1" class="collapse sidebar-submenu">
+                        <a href="@Url.Action("StockInReport", "Report")" class="li-item text-white submenu-item">
+                            <i class="fas fa-arrow-circle-down ml-4"></i>
+                            <span class="menu-collapsed">Stock In</span>
+                        </a>
+                        <a href="@Url.Action("StockOutReport", "Report")" class="li-item text-white submenu-item">
+                            <i class="fas fa-arrow-circle-up ml-4"></i>
+                            <span class="menu-collapsed">Stock Out</span>
+                        </a>
+                        <a href="@Url.Action("AvailableStock", "Report")" class="li-item text-white submenu-item">
+                            <i class="fas fa-list ml-4"></i>
+                            <span class="menu-collapsed">Available Stock</span>
+                        </a>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+        <!-- Sidebar -->
+    </div>
+</div>

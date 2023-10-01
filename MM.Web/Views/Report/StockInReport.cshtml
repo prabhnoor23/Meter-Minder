@@ -1,0 +1,86 @@
+﻿@model List<Pspcl.Services.Models.StockInModel>
+@{
+    Layout = "~/Views/Shared/_TwoColumnLayout.cshtml";
+}
+
+<div class="main-content">
+    <div class="page-content">
+        <div id="stock-in-report"><h3>Stock-In Report</h3> </div>
+        <div class=" mt-1 d-flex align-items-center">
+            <div class="col-md-3 pl-0">
+                <div class="d-flex align-items-center">
+                    <label for="fromDate" class="mr-1 mt-1">From GRN Date <span class="required-field text-danger"></span></label>
+                    <input type="date" class="form-control width-0 custom-field" id="fromDate" placeholder="GRN Date">
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="d-flex align-items-center" style="margin-left: -0.75rem!important;">
+                    <label for="toDate" class="mr-1 mt-1">To GRN Date <span class="required-field text-danger"></span></label>
+                    <input type="date" class="form-control width-0 custom-field" id="toDate" placeholder="GRN Date">
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary mr-1" id="filterStockInButton" data-toggle="tooltip" data-placement="bottom" title="Filter">
+                <i class="fas fa-search"></i>
+            </button>
+            <button onclick="location.href='@Url.Action("StockInReport", "Report")'" type="button" class="btn btn-primary" id="clearButton" data-toggle="tooltip" data-placement="bottom" title="Refresh">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+            <button type="button" class="btn btn-dark blackButton px-5 ml-auto" id="exportButton">Export to Excel</button>
+
+        </div>
+
+        <table id="stockInReportTable" class="table table-responsive custom-table report">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Txn ID</th>
+                    <th scope="col">GRN Date</th>
+                    <th scope="col">GRN No.</th>
+                    <th scope="col">Invoice Date</th>
+                    <th scope="col">Invoice No.</th>
+                    <th scope="col">Prefix</th>
+                    <th scope="col">Make</th>
+                    <th scope="col">T.R.R</th>
+                    <th scope="col">Material Type</th>
+                    <th scope="col">Material Code</th>
+                    <th scope="col">Rate</th>
+                    <th scope="col">Qty</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                @if (Model != null)
+                {
+                    @foreach (var stockInModel in Model)
+                    {
+                        <tr>
+                            <td>@stockInModel.Stock.Id</td>
+                            <td>@stockInModel.Stock.GrnDate.ToString().Split(' ')[0]</td>
+                            <td>@stockInModel.Stock.GrnNumber</td>
+                            <td>@stockInModel.Stock.InvoiceDate.ToString().Split(' ')[0]</td>
+                            <td>@stockInModel.Stock.InvoiceNumber</td>
+                            <td>@stockInModel.Stock.PrefixNumber</td>
+                            <td>@stockInModel.Stock.Make</td>
+                            <td>@stockInModel.Stock.TestReportReference</td>
+                            <td>@stockInModel.MaterialName</td>
+                            <td>@stockInModel.MaterialCode</td>
+                            <td>@stockInModel.Stock.Rate</td>
+                            <td>@stockInModel.Quantity</td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+
+        </table>
+
+        <div id="paginate"></div>
+
+
+
+    </div>
+
+    @Html.Partial("_ModalPartial")
+
+
+</div>

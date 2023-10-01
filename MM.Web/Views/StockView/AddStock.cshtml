@@ -1,0 +1,263 @@
+﻿@{
+    Layout = "~/Views/Shared/_TwoColumnLayout.cshtml";
+}
+@{
+    var Message = TempData["Message"];
+}
+@model Pspcl.Web.ViewModels.StockViewModel
+@using Newtonsoft.Json
+<div class="main-content">
+    <div class="page-content">
+
+        <input type="hidden" id="successMessage" value="@TempData["Message"]" />
+        <div class="modal fade" id="staticBackdropLive" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLiveLabel" aria-modal="true" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title fs-3" id="staticBackdropLiveLabel"></h3>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="successMessagePlaceholder"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        @using (Html.BeginForm("AddStock", "StockView", FormMethod.Post, new { @class = "my-form-class", id = "StockForm" }))
+
+        {
+            <div class="row">
+
+                <div class="form-group col-md-6">
+                    <label for="invoiceNo">Invoice No. <span class="required-field text-danger">*</span></label>
+                    @Html.TextBoxFor(model => model.InvoiceNumber, new { @class = "form-control", @type = "text", @required = "required", placeholder = "Enter Invoice Number", @onchange = "getCorrespondingMakeValue(this.value)"  })
+                    <div class="invalid-feedback">
+                        Please provide a valid state.
+                    </div>
+                </div>
+
+
+                <div class="form-group col-md-6">
+                    <label for="">Invoice Date <span class="required-field text-danger">*</span></label>
+                    @Html.EditorFor(model => model.InvoiceDate, new { htmlAttributes = new { @class = "form-control", @type = "date", @required = "required",id= "invoiceDate", placeholder = "Select Invoice Date" , @onclick = "ClearGrnDate()"} })
+                    <div class="invalid-feedback">
+                        Please provide a valid state.
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="materialGroupId">Material Group <span class="required-field text-danger">*</span></label>
+                    @if (Model.MaterialGroupId != null)
+                    {
+                        @Html.DropDownListFor(m => m.MaterialGroupId, new SelectList(Model.AvailableMaterialGroups, "Value", "Text", Model.MaterialGroupId), "--Select Material Group--", new { @class = "form-control", required = "required", id = "materialGroupId" })
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(m => m.MaterialGroupId, new SelectList(Model.AvailableMaterialGroups, "Value", "Text"), "--Select Material Group--", new { @class = "form-control", required = "required", id = "materialGroupId" })
+                    }
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+
+
+                <div class="form-group col-md-6">
+                    <label for="materialTypeId">Material Type <span class="required-field text-danger">*</span></label>
+                    @if (Model.MaterialTypeId != null)
+                    {
+                        @Html.DropDownListFor(m => m.MaterialTypeId, new SelectList(Model.AvailableMaterialTypes, "Value", "Text", Model.MaterialTypeId), "--Select Material Type--", new { @class = "form-control", required = "required", id = "materialTypeId" })
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(m => m.MaterialTypeId, new SelectList(Model.AvailableMaterialTypes, "Value", "Text"), "--Select Material Type--", new { @class = "form-control", required = "required", id = "materialTypeId" })
+                    }
+                    <div class="invalid-feedback">
+                        Please provide a valid state.
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="ratingId">Rating <span class="required-field text-danger">*</span></label>
+                    @if (Model.Rating != null)
+                    {
+                        @Html.DropDownListFor(m => m.Rating, new SelectList(Model.AvailableRatings, "Value", "Text", Model.Rating), "--Select Rating--", new { @class = "form-control", required = "required", id = "ratingId" })
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(m => m.Rating, new SelectList(Model.AvailableRatings, "Value", "Text"), "--Select Rating--", new { @class = "form-control", required = "required", id = "ratingId" })
+                    }
+                    <div class="invalid-feedback">
+                        Please provide a valid rating.
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="materialId">Material Code <span class="required-field text-danger">*</span></label>
+                    @if (Model.MaterialIdByCode != null)
+                    {
+                        @Html.DropDownListFor(m => m.MaterialIdByCode, new SelectList(Model.AvailableMaterialCodes, "Value", "Text", Model.MaterialIdByCode), "--Select Material Code--", new { @class = "form-control", required = "required", id = "materialId" })
+                    }
+                    else
+                    {
+                        @Html.DropDownListFor(m => m.MaterialIdByCode, new SelectList(Model.AvailableMaterialCodes, "Value", "Text"), "--Select Material Code--", new { @class = "form-control", required = "required", id = "materialId" })
+                    }
+                    <div class="invalid-feedback">
+                        Please provide a valid state.
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="date">GRN Date <span class="required-field text-danger">*</span></label>
+                    @Html.EditorFor(model => model.GrnDate, new { htmlAttributes = new { @class = "form-control", @type = "date", id= "grnDate", @placeholder = "GRN Date", @required = "required",  @onchange = "validateDates()" }})
+                    <div class="invalid-feedback">
+                        Please provide a valid state.
+                    </div>
+                </div>
+
+
+                <div class="form-group col-md-6">
+                    <label for="date">GRN No <span class="required-field text-danger">*</span></label>
+                    @Html.TextBoxFor(model => model.GrnNumber, new { @class = "form-control", @type = "text", @required = "required", @id= "GRNfield", @placeholder = "Enter GRN No", @onchange ="GrnValidation(this.value)"})
+                    <div class="text-danger" id="GrnNumber">
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="">Test Report Reference</label>
+                    @Html.TextBoxFor(model => model.TestReportReference, new { @class = "form-control", placeholder = "Enter Test Report Reference" })
+                    <div class="invalid-feedback">
+                        Please provide a valid state.
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="">Make <span class="required-field text-danger">*</span></label>
+                    @Html.TextBoxFor(model => model.Make, new { @class = "form-control", @required = "required", placeholder = "Make", @id="Make" })
+                    <div class="invalid-feedback">
+                        Please provide a valid state.
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="">Rate <span class="required-field text-danger">*</span></label>
+                    @Html.TextBoxFor(model => model.Rate, new { @class = "form-control", @id="Rate", @type = "number", @step = "any", @required = "required", placeholder = "Enter Rate" })
+                    <small id="enteredRate" class="form-text text-muted"> Max rate value &#x20B9;10,00,000</small>
+                    <div class="invalidEnteredRate text-danger">
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="">Prefix</label>
+                    @Html.TextBoxFor(model => model.PrefixNumber, new { @class = "form-control", @type = "text", @placeholder = "Enter Prefix" })
+                    <div class="invalid-feedback">
+                        Please provide a valid state.
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <div id="materialTable" class="mt-3 mb-5 border-black-top pt-4">
+                <div class="col-12 d-lg-inline-block pr-0">
+                    <button id="addMaterialButton" type="button" class="btn btn-dark blackButton px-5 mt-2 mt-md-4 float-lg-right"><i class="fas fa-plus-square"></i> Add Material</button>
+                </div>
+                <table id="stockTable" class="table table-responsive custom-table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Sr. No From</th>
+                            <th scope="col">Sr. No To</th>
+                            <th scope="col">QTY</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="myTableBody">
+                        @if (Model.stockMaterialList != null && Model.stockMaterialList.Count > 0)
+                        {
+                            @for (int i = 0; i < Model.stockMaterialList.Count; i++)
+                            {
+                                var rowCounter = i + 1;
+                                <tr id="row_@rowCounter">
+                                    <td>                                        
+                                          @Html.TextBox("row_" + rowCounter + "_from", Model.stockMaterialList[i].SerialNumberFrom, new { @class = "from-input", @placeholder = "From", @required = "required" })
+
+                                     </td>
+                                    <td>
+                                        @Html.TextBox("row_" + rowCounter + "_to", Model.stockMaterialList[i].SerialNumberTo, new { @class = "to-input", @placeholder = "From", @required = "required" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBox("row_" + rowCounter + "_qty", Model.stockMaterialList[i].Quantity, new { @class = "qty-input", @placeholder =  "Quantity",@readonly = "readonly", @required = "required" })
+                                    </td>
+                                    <td><button type="button" class="btn btn-danger remove-row" data-row="@rowCounter"><i class="fas fa-minus"></i></button></td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr id="row_1">
+                                <td><span class="required text-danger">*</span><input name="row_1_from" type="number" class="from-input" placeholder="From" min="1" required></td>
+                                <td><span class="required text-danger">*</span><input name="row_1_to" type="number" class="to-input" placeholder="To" min="1" required></td>
+                                <td><input name="row_1_qty" type="number" class="qty-input" placeholder="Quantity" readonly></td>
+                                <td><button type="button" class="btn btn-danger remove-row" data-row="1"><i class="fas fa-minus"></i></button></td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+
+                <div class="modal fade" id="validationModal" tabindex="-1" role="dialog" aria-labelledby="validationModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="validationModalLabel">Validation Error</h5>
+                            </div>
+                            <div class="modal-body">
+                                <p id="modalErrorMessage"></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group offset-md-5">                    
+                    <button type="submit" class="btn btn-dark blackButton px-5 mt-2 mt-md-4" onclick="saveStockMaterialList()">Preview</button>
+                </div>
+
+            </div>
+
+        }
+
+    </div>
+</div>
+
+@if (ViewBag.HasDuplicates != null && (bool)ViewBag.HasDuplicates)
+{
+    <script>
+        $(document).ready(function () {
+            var errorMessage = "The list contains duplicate values.";
+            $('#myModal').modal('show');
+            $('#myModal .modal-body').text(errorMessage);
+        });
+    </script>
+}
+
+<!-- Your modal HTML code -->
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Error</h4>
+            </div>
+            <div class="modal-body">
+                <!-- Error message will be inserted here dynamically -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,153 @@
+﻿@{
+    Layout = "~/Views/Shared/_TwoColumnLayout.cshtml";
+}
+@model Pspcl.Web.Models.IssueStockModel
+
+
+
+<div class="main-content">
+    <div class="page-content">
+        <div id="loadingIndicator" class="loading-indicator" style="display: none;">
+            <div class="spinner"></div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <h2 class="h2-heading">Issue Stock</h2>
+            </div>            
+        </div>
+
+        @using (Html.BeginForm("IssueStockView", "IssueStock", FormMethod.Post, new { @class = "my-form-class", id = "IssueStockForm1", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+
+                <div class="form-group col-md-6">
+                    <label for="currentDate">Current Date:</label>
+                    <input type="text" class="form-control" id="currentDate" readonly>
+
+                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var currentDateField = document.getElementById('currentDate');
+                        var currentDate = new Date().toLocaleDateString();
+                        currentDateField.value = currentDate;
+                    });
+                </script>
+
+                <div class="form-group col-md-6">
+                    <label for="date">Sr No Date <span class="required-field text-danger">*</span></label>
+                    <input type="date" class="form-control" id="SrNoDate" name="SrNoDate" required>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="">Sr No <span class="required-field text-danger">*</span></label>
+                    @Html.TextBoxFor(model => model.SerialNumber, new { @class = "form-control", @type = "text", @required = "required", @placeholder = "Enter srNo" })
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="">Sr Control No <span class="required-field text-danger">*</span></label>
+                    @Html.TextBoxFor(model => model.SrControlNumber, new { @class = "form-control", @type = "text", @required = "required", @placeholder = "Enter SrControlNo", @pattern="^[0-9@#$%^&*\\/\\-]+$", @title = "Only numeric values and special characters are allowed." })
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="">JE Name <span class="required-field text-danger">*</span></label>
+                    @Html.TextBoxFor(model => model.JuniorEngineerName, new { @class = "form-control", @type = "text", @required = "required", @placeholder = "Enter Je Name" })
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="subDivId">Sub Division Name <span class="required-field text-danger">*</span></label>
+                    @Html.DropDownListFor(m => m.SubDivisionId, new SelectList(Model.SubDivisionList, "Value", "Text"), "--Select Sub-Division--", new { @class = "form-control", required = "required", id = "SelectedSubDivId" })
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="materialGroupId">Material Group <span class="required-field text-danger">*</span></label>
+                    @Html.DropDownListFor(m => m.MaterialGroupId, new SelectList(Model.AvailableMaterialGroups, "Value", "Text"), "--Select Material Group-", new { @class = "form-control", required = "required", id = "materialGroupId" })
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="">Division</label>
+                    @Html.TextBoxFor(model => model.Division, new { @class = "form-control", @type = "text", @required = "required", @readonly= "readonly"})
+                    @Html.HiddenFor(m => m.DivisionId, new{@id="DivisionId"})
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="materialTypeId">Material Type <span class="required-field text-danger">*</span></label>
+                    @Html.DropDownListFor(m => m.MaterialTypeId, new SelectList(Model.AvailableMaterialTypes, "Value", "Text"), "--Select Material Type-", new { @class = "form-control", required = "required", id = "materialTypeId" })
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="">LocationCode</label>
+                    @Html.TextBoxFor(model => model.LocationCode, new { @class = "form-control", @type = "text", @required = "required", @readonly= "readonly"})
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="MaterialId">Material Code <span class="required-field text-danger">*</span></label>
+
+                    @Html.DropDownListFor(m => m.MaterialId, new SelectList(Model.AvailableMaterialCodes, "Value", "Text"), "--Select Material Code--", new { @class = "form-control", required = "required", id = "materialId" })
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="">Circle</label>
+                    @Html.TextBoxFor(model => model.Circle, new { @class = "form-control", @type = "text", @required = "required", @readonly= "readonly"})
+                    @Html.HiddenFor(m => m.CircleId,new{@id="CircleId"})
+                </div>
+                <div class="form-group col-md-6">
+                    <div>
+                        @Html.LabelFor(model => model.FileDetails, new { @class = "form-label" })
+                    </div>
+                    <div>
+                        @Html.EditorFor(model => model.File, new { htmlAttributes = new { @class = "form-control p-1", accept = "image/*", onchange = "validateImageFile(this)" } })
+                        <span id="fileValidationMessage"></span>
+                    </div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="">Cost</label>
+                    @Html.TextBoxFor(model => model.Cost, new { @class = "form-control", @type = "text", @required = "required", @readonly= "readonly"})
+                </div>
+            </div>
+
+            <div id="issueMaterial" class="mt-3 mb-12 border-black-top pt-4" style=" display:none;">
+                <table id="issueMaterialTable" class="table table-responsive custom-table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Make</th>
+                            <th scope="col">Availale Quantity</th>
+                            <th scope="col">Enter Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody id="issueMaterialTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-md-12 text-center">
+                <label for="">&nbsp;</label>
+                <button type="submit" class="btn btn-dark blackButton px-4 mt-3 mr-2" id="IssueStockForm">Issue Stock</button>
+                <button type="reset" class="btn btn btn-outline-dark px-4 mt-3" onclick="clearTable()">Reset</button>
+            </div>
+
+		}
+		
+            <!-- Modal -->
+        <div class="modal fade" id="stockNotAvailableModal" tabindex="-1" role="dialog" aria-labelledby="stockNotAvailableModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mySmallModalLabel"></h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <p id="mainModalContent" class="mx-auto my-5 font-weight-normal">
+                        Stock not available!
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>

@@ -1,0 +1,79 @@
+﻿@model List<Pspcl.Services.Models.AvailableStockModel>
+@{
+    Layout = "~/Views/Shared/_TwoColumnLayout.cshtml";
+}
+
+<div class="main-content">
+    <div class="page-content">
+        <div id="available-stock-report"><h3>Available Stock Report</h3> </div>
+        <div class=" mt-4 d-flex align-items-center">
+            <div class="col-md-3 pl-0">
+                <div class="d-flex align-items-center">
+                    <label for="fromDate" class="mr-1 mt-1">From GRN Date <span class="required-field text-danger"></span></label>
+                    <input type="date" class="form-control width-0 custom-field" id="fromDate" placeholder="GRN Date">
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="d-flex align-items-center" style="margin-left: -0.75rem!important;">
+                    <label for="toDate" class="mr-1 mt-1">To GRN Date <span class="required-field text-danger"></span></label>
+                    <input type="date" class="form-control width-0 custom-field" id="toDate" placeholder="GRN Date">
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary mr-1" id="filterAvailableStockButton" data-toggle="tooltip" data-placement="bottom" title="Filter">
+                <i class="fas fa-search"></i>
+            </button>
+            <button onclick="location.href='@Url.Action("AvailableStock", "Report")'" type="button" class="btn btn-primary" id="clearButton" data-toggle="tooltip" data-placement="bottom" title="Refresh">
+                <i class="fas fa-sync-alt"></i>
+            </button>
+            <button type="button" class="btn btn-dark blackButton px-5 ml-auto" id="exportButton">Export to Excel</button>
+
+
+           
+        </div>
+        <table id="availableStockTable" class="table table-responsive custom-table report">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">GRN No.</th>
+                    <th scope="col">GRN Date</th>
+                    <th scope="col">Material Group</th>
+                    <th scope="col">Material Type</th>
+                    <th scope="col">Material Code</th>
+                    <th scope="col">Make</th>
+                    <th scope="col">Sr.No From</th>
+                    <th scope="col">Sr.No To</th>
+                    <th scope="col">Qty</th>
+                    <th scope="col">Rate/Unit</th>
+                    <th scope="col">Value</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                @if (Model != null)
+                {
+                    @foreach (var AvailableStockModel in Model)
+                    {
+                        <tr>
+                            <td>@AvailableStockModel.grnNo</td>
+                            <td>@AvailableStockModel.grnDate.ToString().Split(' ')[0]</td>
+                            <td>@AvailableStockModel.MaterialGroup</td>
+                            <td>@AvailableStockModel.MaterialName</td>
+                            <td>@AvailableStockModel.MaterialCode</td>
+                            <td>@AvailableStockModel.Make</td>
+                            <td>@AvailableStockModel.SrNoFrom</td>
+                            <td>@AvailableStockModel.SrNoTo</td>
+                            <td>@AvailableStockModel.AvailableQuantity</td>
+                            <td>@AvailableStockModel.Rate</td>
+                            <td>@AvailableStockModel.Value</td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+
+        </table>
+        <div id="paginate"></div
+    </div>
+     @Html.Partial("_ModalPartial")
+
+</div>
